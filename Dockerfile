@@ -1,6 +1,5 @@
 FROM python:3.10-slim
 
-# Instalar dependencias
 RUN apt-get update && apt-get install -y \
     lilypond \
     timidity \
@@ -8,10 +7,7 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# ### ESTA ES LA LÍNEA QUE TE FALTA ###
-# Conecta la configuración de los instrumentos (freepats) a Timidity
 RUN echo "source /etc/timidity/freepats.cfg" > /etc/timidity/timidity.cfg
-# #####################################
 
 WORKDIR /app
 

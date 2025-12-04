@@ -7,8 +7,7 @@ from gen.AlgoritmiaParser import AlgoritmiaParser
 from my_visitor import MyAlgoritmiaVisitor
 
 def generate_lilypond_file(notes, filename="alg.ly"):
-    # MODO ABSOLUTO: Sin \relative
-    # \time 4/4 y \tempo aseguran que se vea ordenado como en el PDF
+    
     content = f"""\\version "2.20.0"
 \\score {{
   {{
@@ -42,12 +41,7 @@ def main(argv):
     visitor = MyAlgoritmiaVisitor()
     visitor.visit(tree)
 
-    # --- NUEVO: Generación de Archivos ---
-
-    # 1. Generar el archivo fuente de LilyPond (.ly)
     generate_lilypond_file(visitor.music_sequence)
-
-    # 2. Invocar a LilyPond para crear el PDF y el MIDI
     print("Ejecutando LilyPond...")
     try:
         subprocess.run(["lilypond", "alg.ly"], check=True)
@@ -60,8 +54,6 @@ def main(argv):
 
     print("Convirtiendo MIDI a WAV...")
     try:
-        # --- CORRECCIÓN AQUÍ: Agregamos "-c /etc/timidity/freepats.cfg" ---
-        # Esto le dice a Timidity dónde están los instrumentos dentro de Docker
         cmd = [
             "timidity", 
             "-c", "/etc/timidity/fluidr3_gm.cfg", 
@@ -76,7 +68,7 @@ def main(argv):
         
     except subprocess.CalledProcessError as e:
         print("ERROR CRÍTICO EN TIMIDITY:")
-        print(e.stderr) # Esto imprimirá el error real en tu terminal
+        print(e.stderr) 
     except FileNotFoundError:
         print("ERROR: No se encontró timidity.")
 

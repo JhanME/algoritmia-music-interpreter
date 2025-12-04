@@ -1,24 +1,24 @@
 :root {
     --bg-color: #0a0b10;
-    --panel-bg: rgba(20, 20, 25, 0.85); /* Oscuro y más opaco */
-    --border-color: #333333; /* Borde gris sutil */
+    --panel-bg: rgba(20, 20, 25, 0.85); 
+    --border-color: #333333; 
     --text-primary: #e0e0e0;
     --text-secondary: #a0a0a0;
-    --accent: #3b82f6; /* Azul corporativo mate */
+    --accent: #3b82f6;
 }
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
-    /* Fondo degradado muy sutil */
+   
     background-image: radial-gradient(circle at 50% 0%, #1a1b26 0%, #0a0b10 100%);
     color: var(--text-primary);
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* --- LLUVIA DE NOTAS --- */
+
 #musical-background {
     position: fixed;
     top: 0;
@@ -32,7 +32,7 @@ body {
 .music-note {
     position: absolute;
     top: -30px;
-    color: rgba(255, 255, 255, 0.15); /* Notas muy sutiles, casi transparentes */
+    color: rgba(255, 255, 255, 0.15); 
     font-family: serif;
     animation: fall linear forwards;
 }
@@ -41,7 +41,7 @@ body {
     to { transform: translateY(105vh); opacity: 0; }
 }
 
-/* --- CONTENEDOR PRINCIPAL --- */
+
 .main-wrapper {
     position: relative;
     z-index: 1;
@@ -52,7 +52,7 @@ body {
 }
 
 .title {
-    font-weight: 300; /* Letra fina */
+    font-weight: 300; 
     font-size: 2.5rem;
     margin-bottom: 5px;
     color: #fff;
@@ -67,20 +67,19 @@ body {
     letter-spacing: 2px;
 }
 
-/* --- CAJA PRINCIPAL (Limpieza total) --- */
 .glass-panel {
     width: 100%;
     max-width: 800px;
     background: var(--panel-bg);
-    /* Borde sólido y fino, sin resplandor */
+   
     border: 1px solid var(--border-color);
-    border-radius: 8px; /* Bordes menos redondeados, más serio */
+    border-radius: 8px; 
     padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra negra simple para profundidad */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
     backdrop-filter: blur(5px);
 }
 
-/* --- EDITOR --- */
+
 .input-section label {
     display: block;
     margin-bottom: 8px;
@@ -100,7 +99,7 @@ body {
     height: 200px;
     background: transparent;
     border: none;
-    color: #dbeafe; /* Azul pálido muy suave para el código */
+    color: #dbeafe; 
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     resize: vertical;
@@ -111,7 +110,6 @@ body {
 
 .editor::placeholder { color: #333; }
 
-/* --- BOTÓN --- */
 .actions {
     margin-top: 20px;
     text-align: right;
@@ -138,7 +136,7 @@ body {
     cursor: default;
 }
 
-/* --- RESULTADOS --- */
+
 .results-section h3 {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 8px;
@@ -164,7 +162,6 @@ body {
     color: #ccc;
 }
 
-/* --- DESCARGAS --- */
 .download-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -203,7 +200,7 @@ body {
 }
 
 .glass-panel {
-    /* Importante para posicionar el icono de GitHub relativo a este panel */
+   
     position: relative; 
 }
 
@@ -224,6 +221,6 @@ body {
 }
 
 .github-link:hover {
-    color: var(--text-primary); /* Se vuelve blanco al pasar el mouse */
-    transform: scale(1.1); /* Crece un poquito */
+    color: var(--text-primary); 
+    transform: scale(1.1); 
 }

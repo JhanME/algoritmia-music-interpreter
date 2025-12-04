@@ -17,9 +17,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # Carpeta /api
-PROJECT_ROOT = os.path.dirname(BASE_DIR)              # Carpeta raíz del proyecto
-RUNTIME_DIR = os.path.join(PROJECT_ROOT, "runtime")   # Carpeta para archivos temporales
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) 
+PROJECT_ROOT = os.path.dirname(BASE_DIR)              
+RUNTIME_DIR = os.path.join(PROJECT_ROOT, "runtime")   
 
 
 os.makedirs(RUNTIME_DIR, exist_ok=True)
