@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+python-multipart
+antlr4-python3-runtime
+requests
+aiofiles

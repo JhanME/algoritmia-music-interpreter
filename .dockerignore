@@ -1,0 +1,17 @@
+# Ignorar Git
+.git
+.gitignore
+
+# Ignorar configuraciones de editor
+.idea
+.vscode
+__pycache__
+*.pyc
+
+# Ignorar archivos generados localmente (Docker creará los suyos)
+runtime/
+*.mid
+*.wav
+*.pdf
+*.log
+venv/
