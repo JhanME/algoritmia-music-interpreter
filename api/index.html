@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Algoritmia Web</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1 class="title">Algoritmia Web</h1>
+
+<div class="container">
+
+    <p class="subtitle">Escribe tu código en Algoritmia:</p>
+
+    <textarea id="codigo" class="editor">Main :
+    <w> "Hola Algoritmia"
+    (:) { C D E }
+</textarea>
+
+    <button class="btn-ejecutar" onclick="ejecutar()">Ejecutar</button>
+
+    <p id="error" class="error"></p>
+
+    <h3 class="center-text">Salida:</h3>
+    <div class="output-container">
+        <pre id="output" class="output-box"></pre>
+    </div>
+
+    <h3 class="center-text">Archivos generados:</h3>
+    <div id="downloads" class="download-buttons"></div>
+
+</div>
+
+<script>
+function ejecutar() {
+
+    document.getElementById("error").innerText = "";
+    document.getElementById("output").innerText = "";
+    document.getElementById("downloads").innerHTML = "";
+
+    let code = document.getElementById("codigo").value;
+
+    const form = new FormData();
+    form.append("code", code);
+
+    fetch("/run_text", {
+        method: "POST",
+        body: form
+    })
+    .then(r => r.json())
+    .then(data => {
+
+        if (data.error) {
+            document.getElementById("error").innerText = "Error: " + data.error;
+            return;
+        }
+
+        document.getElementById("output").innerText = data.stdout;
+
+        let buttons = "";
+
+        if (data.files?.pdf)
+            buttons += `<a class="download-btn" href="${data.files.pdf}" target="_blank">📄 Descargar PDF</a>`;
+
+        if (data.files?.midi)
+            buttons += `<a class="download-btn" href="${data.files.midi}" target="_blank">🎵 Descargar MIDI</a>`;
+
+        if (data.files?.wav)
+            buttons += `<a class="download-btn" href="${data.files.wav}" target="_blank">🔊 Descargar WAV</a>`;
+
+        document.getElementById("downloads").innerHTML = buttons;
+    })
+    .catch(err => {
+        document.getElementById("error").innerText = "Error: " + err;
+    });
+}
+</script>
+
+</body>
+</html>

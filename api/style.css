@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("static/1280x800.jpg") no-repeat center center fixed;
+    background-size: cover;
+    backdrop-filter: blur(4px);
+}
+
+.title {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 30px;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    background: white;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.editor {
+    width: 90%;
+    max-width: 750px;
+    display: block;
+    margin: 0 auto;
+    height: 200px;
+    font-size: 16px;
+    padding: 15px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.btn-ejecutar {
+    width: 90%;
+    max-width: 750px;
+    display: block;
+    margin: 20px auto;
+    padding: 14px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-ejecutar:hover {
+    background-color: #0066d6;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.output-container {
+    text-align: center;
+}
+
+.output-box {
+    background: #eee;
+    width: 80%;
+    max-width: 700px;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px auto;
+    font-size: 16px;
+    text-align: left;
+}
+
+.download-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.download-btn {
+    background: #000;
+    color: white;
+    padding: 10px 18px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.download-btn:hover {
+    background: #333;
+}
+
+h1 {
+    color: white !important;
+    text-shadow: 0 0 6px rgba(0,0,0,0.6);
+}
