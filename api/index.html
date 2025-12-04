@@ -1,80 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Algoritmia Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmia Music Interpreter</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<h1 class="title">Algoritmia Web</h1>
+    <div id="musical-background"></div>
 
-<div class="container">
+    <div class="main-wrapper">
+        <h1 class="title">Interpreter Musical</h1>
+        <p class="subtitle">Algoritmia Language</p>
 
-    <p class="subtitle">Escribe tu código en Algoritmia:</p>
+        <div class="glass-panel">
+            
+            <a href="https://github.com/JhanME/algoritmia-music-interpreter" target="_blank" class="github-link" title="Ver código en GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+            </a>
 
-    <textarea id="codigo" class="editor">Main :
-    <w> "Hola Algoritmia"
-    (:) { C D E }
-</textarea>
+            <div class="input-section">
+                <label for="codigo">Código Fuente:</label>
+                <div class="editor-wrapper">
+                    <textarea id="codigo" class="editor" spellcheck="false" placeholder="Escribe tu algoritmo aquí...">Main : 
+    <w> "Hola Algoritmia" 
+    (:) { C D E }</textarea>
+                </div>
+            </div>
 
-    <button class="btn-ejecutar" onclick="ejecutar()">Ejecutar</button>
+            <div class="actions">
+                <button class="btn-ejecutar" onclick="ejecutar()">
+                    Ejecutar Código
+                </button>
+            </div>
 
-    <p id="error" class="error"></p>
+            <div class="status-area">
+                <p id="error" class="error"></p>
+            </div>
 
-    <h3 class="center-text">Salida:</h3>
-    <div class="output-container">
-        <pre id="output" class="output-box"></pre>
+            <div class="results-section">
+                <h3>Salida:</h3>
+                <div class="output-container">
+                    <pre id="output" class="output-box">Esperando ejecución...</pre>
+                </div>
+
+                <h3>Descargas:</h3>
+                <div id="downloads" class="download-buttons">
+                    <span class="placeholder-text">Los archivos generados aparecerán aquí.</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <h3 class="center-text">Archivos generados:</h3>
-    <div id="downloads" class="download-buttons"></div>
-
-</div>
-
 <script>
-function ejecutar() {
+    // --- LÓGICA DE EJECUCIÓN (Sin cambios) ---
+    function ejecutar() {
+        const btn = document.querySelector('.btn-ejecutar');
+        const output = document.getElementById("output");
+        const errorMsg = document.getElementById("error");
+        const downloads = document.getElementById("downloads");
 
-    document.getElementById("error").innerText = "";
-    document.getElementById("output").innerText = "";
-    document.getElementById("downloads").innerHTML = "";
+        btn.disabled = true;
+        btn.innerText = "Procesando...";
+        errorMsg.innerText = "";
+        output.innerText = "Compilando...";
+        output.style.color = "#888"; 
+        downloads.innerHTML = "";
 
-    let code = document.getElementById("codigo").value;
+        let code = document.getElementById("codigo").value;
+        const form = new FormData();
+        form.append("code", code);
 
-    const form = new FormData();
-    form.append("code", code);
+        fetch("/run_text", {
+            method: "POST",
+            body: form
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerText = "Ejecutar Código";
+            output.style.color = "#ddd"; 
 
-    fetch("/run_text", {
-        method: "POST",
-        body: form
-    })
-    .then(r => r.json())
-    .then(data => {
+            if (data.error) {
+                errorMsg.innerText = "Error: " + data.error;
+                output.innerText = "Falló la ejecución.";
+                return;
+            }
 
-        if (data.error) {
-            document.getElementById("error").innerText = "Error: " + data.error;
-            return;
-        }
+            output.innerText = data.stdout || "Ejecución finalizada.";
 
-        document.getElementById("output").innerText = data.stdout;
+            let buttons = "";
+            if (data.files?.pdf) buttons += createBtn(data.files.pdf, 'PDF', '#e74c3c');
+            if (data.files?.midi) buttons += createBtn(data.files.midi, 'MIDI', '#f1c40f');
+            if (data.files?.wav) buttons += createBtn(data.files.wav, 'WAV', '#2ecc71');
 
-        let buttons = "";
+            downloads.innerHTML = buttons || "<span class='placeholder-text'>Sin archivos.</span>";
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerText = "Ejecutar Código";
+            errorMsg.innerText = "Error de conexión: " + err;
+        });
+    }
 
-        if (data.files?.pdf)
-            buttons += `<a class="download-btn" href="${data.files.pdf}" target="_blank">📄 Descargar PDF</a>`;
+    function createBtn(url, type, color) {
+        return `<a class="download-btn" href="${url}" target="_blank" style="border-left: 3px solid ${color}">
+                    Descargar ${type}
+                </a>`;
+    }
 
-        if (data.files?.midi)
-            buttons += `<a class="download-btn" href="${data.files.midi}" target="_blank">🎵 Descargar MIDI</a>`;
+    // --- EFECTO DE LLUVIA (NOTAS) (Sin cambios) ---
+    function createMusicNote() {
+        const container = document.getElementById('musical-background');
+        const symbols = ['♪', '♫', '♩', '♭', '♮', '♯'];
+        const note = document.createElement('div');
+        
+        note.classList.add('music-note');
+        note.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        note.style.left = Math.random() * 95 + 'vw';
+        
+        const duration = Math.random() * 20 + 15; 
+        note.style.animationDuration = duration + 's';
+        note.style.fontSize = (Math.random() * 30 + 20) + 'px'; 
+        
+        container.appendChild(note);
 
-        if (data.files?.wav)
-            buttons += `<a class="download-btn" href="${data.files.wav}" target="_blank">🔊 Descargar WAV</a>`;
-
-        document.getElementById("downloads").innerHTML = buttons;
-    })
-    .catch(err => {
-        document.getElementById("error").innerText = "Error: " + err;
-    });
-}
+        setTimeout(() => { note.remove(); }, duration * 1000);
+    }
+    setInterval(createMusicNote, 400);
 </script>
 
 </body>

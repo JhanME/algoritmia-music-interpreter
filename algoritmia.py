@@ -48,7 +48,6 @@ def main(argv):
     generate_lilypond_file(visitor.music_sequence)
 
     # 2. Invocar a LilyPond para crear el PDF y el MIDI
-    # Asegúrate de que 'lilypond' esté en tu PATH o pon la ruta completa al ejecutable
     print("Ejecutando LilyPond...")
     try:
         subprocess.run(["lilypond", "alg.ly"], check=True)
@@ -61,15 +60,25 @@ def main(argv):
 
     print("Convirtiendo MIDI a WAV...")
     try:
-        # Nota: En tu captura el archivo se llama 'alg.mid', así que usaremos ese nombre.
-        # El comando es: timidity alg.mid -Ow -o alg.wav
-        subprocess.run(["timidity", "alg.mid", "-Ow", "-o", "alg.wav"], check=True)
-        print("¡Éxito! Se generó alg.wav")
+        # --- CORRECCIÓN AQUÍ: Agregamos "-c /etc/timidity/freepats.cfg" ---
+        # Esto le dice a Timidity dónde están los instrumentos dentro de Docker
+        cmd = [
+            "timidity", 
+            "-c", "/etc/timidity/fluidr3_gm.cfg", 
+            "alg.midi", 
+            "-Ow", 
+            "-o", "alg.wav"
+        ]
+        
+        subprocess.run(cmd, check=True)
+        result = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        print("¡Éxito! Se generó alg.wav con sonido.")
+        
+    except subprocess.CalledProcessError as e:
+        print("ERROR CRÍTICO EN TIMIDITY:")
+        print(e.stderr) # Esto imprimirá el error real en tu terminal
     except FileNotFoundError:
-        print("ERROR: No se encontró el comando 'timidity'.")
-        print("Asegúrate de tener Timidity++ instalado y agregado a tu PATH de Windows.")
-    except subprocess.CalledProcessError:
-        print("ERROR: Falló la conversión a WAV.")
+        print("ERROR: No se encontró timidity.")
 
 
 if __name__ == '__main__':
